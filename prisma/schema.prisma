@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CITIZEN
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String
+  role         Role     @default(CITIZEN)
+
+  reports      Report[]
+  assignments  Assignment[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?
+
+  reports      Report[]
+
+  createdAt    DateTime @default(now())
+}
+
+model Status {
+  id           String   @id @default(cuid())
+  name         String   @unique
+
+  reports      Report[]
+}
+
+model Report {
+  id            String      @id @default(cuid())
+
+  title         String
+  description   String
+  location      String
+
+  userId        String
+  categoryId    String
+  statusId      String
+
+  user          User        @relation(fields: [userId], references: [id])
+  category      Category    @relation(fields: [categoryId], references: [id])
+  status        Status      @relation(fields: [statusId], references: [id])
+
+  assignment    Assignment?
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  inProgressAt DateTime?
+  resolvedAt DateTime?
+}
+
+model Assignment {
+  id            String    @id @default(cuid())
+
+  reportId      String    @unique
+  adminId       String
+
+  report        Report    @relation(fields: [reportId], references: [id])
+  admin         User      @relation(fields: [adminId], references: [id])
+
+  assignedAt    DateTime  @default(now())
+}

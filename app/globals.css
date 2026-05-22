@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* ─── Variables de color SIGECOM ─── */
+:root {
+  /* Verde institucional */
+  --sigecom-green-50:  #f0fdf4;
+  --sigecom-green-100: #dcfce7;
+  --sigecom-green-200: #bbf7d0;
+  --sigecom-green-500: #22c55e;
+  --sigecom-green-600: #16a34a;
+  --sigecom-green-700: #15803d;
+  --sigecom-green-900: #14532d;
+
+  /* Grises neutros */
+  --sigecom-gray-50:  #f9fafb;
+  --sigecom-gray-100: #f3f4f6;
+  --sigecom-gray-200: #e5e7eb;
+  --sigecom-gray-400: #9ca3af;
+  --sigecom-gray-600: #4b5563;
+  --sigecom-gray-900: #111827;
+
+  /* Estados de reporte */
+  --estado-pendiente-bg:   #fefce8;
+  --estado-pendiente-text: #854d0e;
+  --estado-pendiente-ring: #fde047;
+
+  --estado-en-proceso-bg:   #eff6ff;
+  --estado-en-proceso-text: #1e40af;
+  --estado-en-proceso-ring: #93c5fd;
+
+  --estado-resuelto-bg:   #f0fdf4;
+  --estado-resuelto-text: #15803d;
+  --estado-resuelto-ring: #86efac;
+
+  /* Sombras */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.08);
+
+  /* Radio de bordes */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* ─── Reset y base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-geist-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Utilidades personalizadas ─── */
+
+/* Tarjeta base */
+.card {
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+}
+
+/* Botón primario SIGECOM */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--sigecom-green-600);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--sigecom-green-700);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Botón secundario */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  color: var(--sigecom-gray-900);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--sigecom-gray-200);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: var(--sigecom-gray-50);
+}
+
+/* Input base */
+.input-base {
+  width: 100%;
+  border: 1px solid var(--sigecom-gray-200);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--sigecom-gray-900);
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-base:focus {
+  border-color: var(--sigecom-green-500);
+  box-shadow: 0 0 0 3px var(--sigecom-green-100);
+}
+
+.input-base::placeholder {
+  color: var(--sigecom-gray-400);
+}
+
+/* Badge de estado */
+.badge-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--estado-pendiente-bg);
+  color: var(--estado-pendiente-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--estado-pendiente-ring);
+}
+
+.badge-en-proceso {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--estado-en-proceso-bg);
+  color: var(--estado-en-proceso-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--estado-en-proceso-ring);
+}
+
+.badge-resuelto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--estado-resuelto-bg);
+  color: var(--estado-resuelto-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--estado-resuelto-ring);
+}
+
+/* ─── Animaciones suaves ─── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
