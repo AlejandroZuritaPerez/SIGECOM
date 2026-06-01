@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { transporter } from "@/lib/mailer";
 
 export async function POST(req: Request) {
   try {
@@ -35,8 +33,8 @@ export async function POST(req: Request) {
 
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password/${token}`;
 
-    await resend.emails.send({
-      from: "onboarding@resend.dev",
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
       to: user.email,
       subject: "Recuperación de contraseña SIGECOM",
       html: `
@@ -55,7 +53,7 @@ export async function POST(req: Request) {
     </p>
   `,
     });
-    
+
     console.log("TOKEN:", token);
 
     return NextResponse.json({
