@@ -325,7 +325,7 @@ export default function NewReportPage() {
           "
                 >
 
-                  Crear reporte de todos modos
+                  Crear reporte por que no coinde con ninguno
 
                 </button>
 
