@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "alexitsav@gmail.com",
+      to: user.email,
       subject: "Recuperación de contraseña SIGECOM",
       html: `
     <h2>Recuperación de contraseña</h2>
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     </p>
   `,
     });
-
+    
     console.log("TOKEN:", token);
 
     return NextResponse.json({
