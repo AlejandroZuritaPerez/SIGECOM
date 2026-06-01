@@ -5,7 +5,7 @@ export async function PUT(req: Request) {
   try {
     const body = await req.json();
 
-    const { reportId, statusName } = body;
+    const { reportId, statusName, feedback, isDiscarded, isDeleted } = body;
 
     const status = await prisma.status.findFirst({
       where: {
@@ -16,13 +16,19 @@ export async function PUT(req: Request) {
     if (!status) {
       return NextResponse.json(
         { error: "Estado no encontrado" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const updateData: any = {
       statusId: status.id,
+      isDiscarded: isDiscarded ?? false,
+      isDeleted: isDeleted ?? false,
     };
+
+    if (feedback) {
+      updateData.feedback = feedback;
+    }
 
     if (statusName === "En Proceso") {
       updateData.inProgressAt = new Date();
@@ -36,7 +42,10 @@ export async function PUT(req: Request) {
       where: {
         id: reportId,
       },
-      data: updateData,
+      data: {
+        ...updateData,
+        feedback: feedback || null,
+      },
     });
 
     return NextResponse.json(updatedReport);
@@ -45,7 +54,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json(
       { error: "Error actualizando reporte" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

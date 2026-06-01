@@ -7,17 +7,11 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-
   try {
-
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
-
-      return NextResponse.json(
-        { error: "No autorizado" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -27,22 +21,34 @@ export async function GET() {
     });
 
     if (!user) {
-
       return NextResponse.json(
         { error: "Usuario no encontrado" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const reports = await prisma.report.findMany({
-
       where: {
-        userId: user.id,
+        OR: [
+          {
+            userId: user.id,
+          },
+
+          {
+            supports: {
+              some: {
+                userId: user.id,
+              },
+            },
+          },
+        ],
       },
 
       include: {
         status: true,
         category: true,
+        user: true,
+        supports: true,
       },
 
       orderBy: {
@@ -51,14 +57,12 @@ export async function GET() {
     });
 
     return NextResponse.json(reports);
-
   } catch (error) {
-
     console.error(error);
 
     return NextResponse.json(
       { error: "Error al obtener reportes" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

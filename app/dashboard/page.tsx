@@ -32,7 +32,14 @@ export default function DashboardPage() {
 
         const data = await response.json();
 
-        setReports(data);
+        console.log("MY REPORTS:", data);
+
+        if (Array.isArray(data)) {
+          setReports(data);
+        } else {
+          console.error(data);
+          setReports([]);
+        }
 
       } catch (error) {
 
@@ -74,6 +81,12 @@ export default function DashboardPage() {
               className="rounded-2xl px-4 py-3 text-emerald-100/90 transition hover:bg-white/10"
             >
               Mis Reportes
+            </Link>
+            <Link
+              href="/community-reports"
+              className="rounded-2xl px-4 py-3 text-emerald-100/90 transition hover:bg-white/10"
+            >
+              Reportes comunitarios
             </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
@@ -162,7 +175,7 @@ export default function DashboardPage() {
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       Después aquí conectamos Google Maps, Leaflet o la opción
-                      que decidan usar.
+                      que vayamos más factible.
                     </p>
                   </div>
                 </div>

@@ -12,6 +12,9 @@ export default function NewReportPage() {
   const [location, setLocation] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
+  const [matches, setMatches] = useState<any[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [supporting, setSupporting] = useState(false);
 
   useEffect(() => {
 
@@ -37,6 +40,35 @@ export default function NewReportPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    setSearching(true);
+
+    const searchResponse = await fetch(
+      "/api/reports/search",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: title,
+        }),
+      }
+    );
+
+    const foundReports = await searchResponse.json();
+
+    setSearching(false);
+
+    if (foundReports.length > 0) {
+      setMatches(foundReports);
+
+      toast.info(
+        "Se encontraron reportes similares."
+      );
+
+      return;
+    }
 
     const response = await fetch("/api/reports", {
       method: "POST",
@@ -147,6 +179,108 @@ export default function NewReportPage() {
             Crear reporte
           </button>
         </form>
+        {matches.length > 0 && (
+
+          <div className="mt-8 rounded-2xl border border-yellow-300 bg-yellow-50 p-6">
+
+            <h2 className="mb-4 text-xl font-bold">
+
+              ¿Este reporte coincide con lo que deseas reportar?
+
+            </h2>
+
+            <div className="space-y-4">
+
+              {matches.map((report) => (
+
+                <div
+                  key={report.id}
+                  className="rounded-xl border bg-white p-4"
+                >
+
+                  <h3 className="font-semibold text-lg">
+                    {report.title}
+                  </h3>
+
+                  <p className="text-gray-600">
+                    {report.description}
+                  </p>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    Ubicación: {report.location}
+                  </p>
+
+                  <p className="mt-2 font-medium text-emerald-700">
+                    Apoyos: {report.supportCount}
+                  </p>
+
+                  <button
+                    type="button"
+                    disabled={supporting}
+                    onClick={async () => {
+
+                      try {
+
+                        setSupporting(true);
+
+                        const response = await fetch(
+                          "/api/reports/support",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type":
+                                "application/json",
+                            },
+                            body: JSON.stringify({
+                              reportId: report.id,
+                            }),
+                          }
+                        );
+
+                        const data =
+                          await response.json();
+
+                        if (!response.ok) {
+
+                          toast.error(
+                            data.error ||
+                            "Error al apoyar reporte"
+                          );
+
+                          return;
+                        }
+
+                        toast.success(
+                          "Te sumaste al reporte"
+                        );
+
+                      } catch {
+
+                        toast.error(
+                          "Error al apoyar reporte"
+                        );
+
+                      } finally {
+
+                        setSupporting(false);
+
+                      }
+
+                    }}
+                    className="mt-4 rounded-xl bg-emerald-600 px-4 py-2 text-white"
+                  >
+                    Sumarme al reporte
+                  </button>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        )}
       </div>
     </main>
   );

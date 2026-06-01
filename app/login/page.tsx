@@ -149,8 +149,18 @@ export default function LoginPage() {
             className="font-semibold text-green-600 hover:underline"
           >
 
-            Regístrate aquí
+            Regístrate aquí 
 
+          </Link>
+
+          <span>|</span>
+
+          <Link
+            href="/forgot-password"
+          >
+
+            ¿Olvidaste tu contraseña?
+            
           </Link>
 
         </div>
