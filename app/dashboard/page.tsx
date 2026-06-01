@@ -79,7 +79,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <nav className="flex flex-1 flex-col gap-2 px-4 py-6 text-sm">
+          <nav className="flex flex-col gap-2 px-4 py-6 text-sm">
             <Link
               href="/dashboard"
               className="rounded-2xl bg-white/10 px-4 py-3 font-medium transition hover:bg-white/15"
@@ -106,7 +106,7 @@ export default function DashboardPage() {
             </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="mt-auto rounded-2xl px-4 py-3 text-left text-emerald-100/90 transition hover:bg-white/10"
+              className="rounded-2xl px-4 py-3 text-left text-emerald-100/90 transition hover:bg-white/10"
             >
               Cerrar Sesión
             </button>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
           <div className="border-t border-white/10 px-6 py-5">
             <div className="rounded-3xl bg-white/10 p-4">
               <p className="text-sm font-semibold"> {session?.user?.name} </p>
-              <p className="text-xs text-emerald-100/80"> {session?.user?.role} </p>
+              <p className="text-xs text-emerald-100/80"> {String(session?.user?.role).toUpperCase()} </p>
             </div>
           </div>
         </aside>
@@ -131,26 +131,21 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="flex justify-end p-4 lg:hidden">
-              <button onClick={() => setMenuOpen(false)}>
-                <X size={28} />
-              </button>
-            </div>
-
-            <button
-              onClick={() => setMenuOpen(true)}
-              className="rounded-xl p-2 lg:hidden"
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              <Menu size={28} />
-            </button>
-
-            <div className="flex items-center gap-3">
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-semibold text-gray-900"> {session?.user?.name} </p>
                 <p className="text-xs text-gray-500"> {session?.user?.email} </p>
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-200 font-bold text-gray-700">
-                C-A
+                {session?.user?.name
+                  ?.split(" ")
+                  .slice(0, 2)
+                  .map((word) => word.charAt(0))
+                  .join("")
+                  .toUpperCase() || "U"}
               </div>
             </div>
           </header>
