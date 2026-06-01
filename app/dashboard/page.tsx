@@ -4,10 +4,12 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
   const [reports, setReports] = useState<any[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
   const totalReports = reports.length;
 
   const pendingReports = reports.filter(
@@ -55,7 +57,21 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gray-100">
       <div className="flex min-h-screen">
-        <aside className="hidden w-64 flex-col bg-emerald-950 text-white lg:flex">
+        {menuOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+        <aside
+          className={`
+    fixed left-0 top-0 z-50 h-full w-64
+    bg-emerald-950 text-white
+    transform transition-transform duration-300
+    lg:static lg:flex lg:translate-x-0
+    ${menuOpen ? "translate-x-0" : "-translate-x-full"}
+  `}
+        >
           <div className="border-b border-white/10 px-6 py-5">
             <h1 className="text-2xl font-bold tracking-wide">SIGECOM</h1>
             <p className="mt-1 text-sm text-emerald-100/80">
@@ -114,6 +130,19 @@ export default function DashboardPage() {
                 Vista general del ciudadano
               </p>
             </div>
+
+            <div className="flex justify-end p-4 lg:hidden">
+              <button onClick={() => setMenuOpen(false)}>
+                <X size={28} />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="rounded-xl p-2 lg:hidden"
+            >
+              <Menu size={28} />
+            </button>
 
             <div className="flex items-center gap-3">
               <div className="hidden text-right sm:block">
@@ -175,7 +204,7 @@ export default function DashboardPage() {
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       Después aquí conectamos Google Maps, Leaflet o la opción
-                      que vayamos más factible.
+                      que veamos más factible.
                     </p>
                   </div>
                 </div>
