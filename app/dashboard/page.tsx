@@ -141,9 +141,11 @@ export default function DashboardPage() {
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-200 font-bold text-gray-700">
                 {session?.user?.name
+                  ?.trim()
                   ?.split(" ")
+                  .filter(Boolean)
                   .slice(0, 2)
-                  .map((word) => word.charAt(0))
+                  .map((n) => n[0])
                   .join("")
                   .toUpperCase() || "U"}
               </div>
