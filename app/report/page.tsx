@@ -325,7 +325,7 @@ export default function NewReportPage() {
           "
                 >
 
-                  Crear reporte por que no coinde con ninguno
+                  Crear reporte por que no coincide con ninguno
 
                 </button>
 
