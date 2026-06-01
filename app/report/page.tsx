@@ -13,6 +13,8 @@ export default function NewReportPage() {
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
   const [matches, setMatches] = useState<any[]>([]);
+  const [showCreateAnyway, setShowCreateAnyway] =
+    useState(false);
   const [searching, setSearching] = useState(false);
   const [supporting, setSupporting] = useState(false);
 
@@ -60,8 +62,13 @@ export default function NewReportPage() {
 
     setSearching(false);
 
+    
+
     if (foundReports.length > 0) {
+
       setMatches(foundReports);
+
+      setShowCreateAnyway(true);
 
       toast.info(
         "Se encontraron reportes similares."
@@ -89,6 +96,28 @@ export default function NewReportPage() {
       router.push("/reports");
     } else {
       toast.error("Error al crear reporte!");
+    }
+  }
+
+  async function createReportAnyway() {
+    const response = await fetch("/api/reports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        location,
+        categoryId,
+      }),
+    });
+
+    if (response.ok) {
+      toast.success("Reporte creado correctamente");
+      router.push("/reports");
+    } else {
+      toast.error("Error al crear reporte");
     }
   }
 
@@ -277,6 +306,32 @@ export default function NewReportPage() {
               ))}
 
             </div>
+
+            {showCreateAnyway && (
+
+              <div className="mt-6">
+
+                <button
+                  type="button"
+                  onClick={createReportAnyway}
+                  className="
+            w-full
+            rounded-xl
+            bg-orange-500
+            px-6
+            py-4
+            text-white
+            font-semibold
+          "
+                >
+
+                  Crear reporte de todos modos
+
+                </button>
+
+              </div>
+
+            )}
 
           </div>
 
